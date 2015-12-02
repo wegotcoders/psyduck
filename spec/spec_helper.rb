@@ -4,4 +4,3 @@ require 'minitest/autorun'
 require 'minitest/documentation'
 require 'fake_ftp'
 require 'pry'
-
