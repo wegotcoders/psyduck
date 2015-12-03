@@ -18,17 +18,26 @@ module Psyduck
       @command_port = command_port
       @passivity = passivity
       @resumable = true
+      @ftp = Net::FTP.new
     end
 
-    def upload_file_to_server(path_to_file)
-      file = File.open(path_to_file)
-      ftp = Net::FTP.new
-      ftp.connect(@ip_address, @command_port)
-      ftp.login(@username, @password)
-      ftp.passive = true
-      ftp.resume = @resumable
-      ftp.put(file)
-      ftp.close
+    def ftp
+      @ftp
+    end
+
+    def connect
+      @ftp.connect(@ip_address, @command_port)
+    end
+
+    def login
+      @ftp.login(@username, @password)
+    end
+
+    def upload_file_to_server(path_to_local_file, path_to_remote_directory)
+      file = File.open(path_to_local_file)
+      @ftp.passive = @passivity
+      @ftp.resume = @resumable
+      @ftp.put(file)
     end
   end
 end
