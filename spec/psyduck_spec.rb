@@ -73,7 +73,7 @@ class PsyduckTest < Minitest::Test
 
         it 'must upload the complete file to a specific remote directory' do
           @ftp_client.ftp.chdir('/pub/test_dir')
-          puts @ftp_client.ftp.list.last.must_match(/file_for_test_upload.txt/)
+          @ftp_client.ftp.list.last.must_match(/file_for_test_upload.txt/)
           @server.file('file_for_test_upload.txt').bytes.must_equal 20
         end
 
