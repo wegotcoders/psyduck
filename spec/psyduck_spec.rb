@@ -11,7 +11,11 @@ class PsyduckTest < Minitest::Test
     before do
       @server = FakeFtp::Server.new(21212, 21213)
       @server.start
-      @ftp_client = Psyduck::FTPClient.new('127.0.0.1', 'username', 'password', 21212)
+      @ftp_client = Psyduck::FTPClient.new(
+        ip_address: '127.0.0.1',
+        username: 'username',
+        password: 'password',
+        command_port: 21212)
     end
 
     after do
@@ -36,25 +40,49 @@ class PsyduckTest < Minitest::Test
       end
 
       it 'may run in active or passive mode (defaults to passive)' do
-        @ftp_client.passivity.must_equal true
+        @ftp_client.ftp.passive.must_equal true
+      end
+
+      it 'must expose a Net::FTP object' do
+        @ftp_client.ftp.class.must_equal Net::FTP
+      end
+
+      describe 'Session facility' do
+        it 'must be able to establish and close a connection with the remote host' do
+          @ftp_client.connect
+          @server.connection.wont_be_nil
+
+          @ftp_client.ftp.close
+          @ftp_client.ftp.closed?.must_equal true
+        end
+
+        #fake_ftp does not currently provide the functionality to create test accounts
+        #however something along the following lines might be desirable...
+
+        # it 'will raise an error if unable to authenticate with the remote host' do
+        #   @ftp_client = Psyduck::FTPClient.new('127.0.0.1', 'username', 'bad-password', 21212)
+        #   @ftp_client.connect
+
+        #   proc { @ftp_client.login }.must_raise Net::FTPPermError
+        # end
       end
 
       describe 'Upload process' do
         before do
-          @ftp_client.upload_file_to_server('spec/fixtures/file_for_test_upload.txt')
+          @ftp_client.connect
+          @ftp_client.login
+          @ftp_client.ftp.mkdir('/pub/test_dir')
+          @ftp_client.upload_file_to_server('spec/fixtures/file_for_test_upload.txt', '/pub/test_dir')
         end
 
-        it 'must uplaod the file to the FTP server' do
-          @server.files.must_include('file_for_test_upload.txt')
-        end
-
-        it 'must not lose any data' do
-          #newline byte is ignored by file method
+        it 'must upload the complete file to a specific remote directory' do
+          @ftp_client.ftp.chdir('/pub/test_dir')
+          @ftp_client.ftp.list.last.must_match(/file_for_test_upload.txt/)
           @server.file('file_for_test_upload.txt').bytes.must_equal 20
         end
 
         it 'must resume if interrupted' do
-          @ftp_client.resumable.must_equal true
+          @ftp_client.ftp.resume.must_equal true
         end
       end
     end
