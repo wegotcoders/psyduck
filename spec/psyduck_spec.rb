@@ -36,7 +36,7 @@ class PsyduckTest < Minitest::Test
       end
 
       it 'may run in active or passive mode (defaults to passive)' do
-        @ftp_client.passivity.must_equal true
+        @ftp_client.ftp.passive.must_equal true
       end
 
       it 'must expose a Net::FTP object' do
@@ -78,7 +78,7 @@ class PsyduckTest < Minitest::Test
         end
 
         it 'must resume if interrupted' do
-          @ftp_client.resumable.must_equal true
+          @ftp_client.ftp.resume.must_equal true
         end
       end
     end
