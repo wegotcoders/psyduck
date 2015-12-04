@@ -11,7 +11,14 @@ module Psyduck
     attr_reader :passivity
     attr_reader :resumable
 
-    def initialize(ip_address, username = 'anonymous', password = nil, command_port = 21, passivity = true, options = {})
+    def initialize(
+      ip_address:,
+      username: 'anonymous',
+      password: nil,
+      command_port: 21,
+      passivity: true,
+      options: {})
+
       @ip_address = ip_address
       @username = username
       @password = password

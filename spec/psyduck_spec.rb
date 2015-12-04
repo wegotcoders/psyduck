@@ -11,7 +11,11 @@ class PsyduckTest < Minitest::Test
     before do
       @server = FakeFtp::Server.new(21212, 21213)
       @server.start
-      @ftp_client = Psyduck::FTPClient.new('127.0.0.1', 'username', 'password', 21212)
+      @ftp_client = Psyduck::FTPClient.new(
+        ip_address: '127.0.0.1',
+        username: 'username',
+        password: 'password',
+        command_port: 21212)
     end
 
     after do
