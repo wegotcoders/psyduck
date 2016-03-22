@@ -1,8 +1,6 @@
 # Psyduck
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/psyduck`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A very basic ftp client using the Ruby Net::FTP class
 
 ## Installation
 
@@ -22,7 +20,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+  @ftp_client = Psyduck::FTPClient.new(
+    ip_address: '127.0.0.1',
+    username: 'username',
+    password: 'password',
+    command_port: 21212)
+
+    @ftp_client.connect
+
+    @ftp_client.login
+    @ftp_client.ftp.mkdir('/pub/test_dir')
+    @ftp_client.upload_file_to_server('file_for_upload.txt', 'remote_directory/')
+
+    @ftp_client.ftp.close
+```
 
 ## Development
 
