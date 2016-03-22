@@ -29,7 +29,7 @@ Or install it yourself as:
 
   @ftp_client.connect
   @ftp_client.login
-  @ftp_client.ftp.mkdir('/remote_directory')
+  @ftp_client.ftp.mkdir('remote_directory/')
   @ftp_client.upload_file_to_server('file_for_upload.txt', 'remote_directory/')
   @ftp_client.ftp.close
 ```
