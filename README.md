@@ -27,13 +27,11 @@ Or install it yourself as:
     password: 'password',
     command_port: 21212)
 
-    @ftp_client.connect
-
-    @ftp_client.login
-    @ftp_client.ftp.mkdir('/pub/test_dir')
-    @ftp_client.upload_file_to_server('file_for_upload.txt', 'remote_directory/')
-
-    @ftp_client.ftp.close
+  @ftp_client.connect
+  @ftp_client.login
+  @ftp_client.ftp.mkdir('/pub/test_dir')
+  @ftp_client.upload_file_to_server('file_for_upload.txt', 'remote_directory/')
+  @ftp_client.ftp.close
 ```
 
 ## Development
